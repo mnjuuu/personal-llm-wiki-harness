@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Personal LLM Wiki</title>
+  <link rel="icon" href="data:," />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --panel: #151a23;
+      --panel2: #1f2633;
+      --line: #2b3342;
+      --text: #eef2f7;
+      --muted: #9aa7b8;
+      --blue: #64a8ff;
+      --green: #34d399;
+      --yellow: #f4c95d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    }
+    .app { display: grid; grid-template-columns: 330px 1fr 440px; min-height: 100vh; }
+    aside, main { border-right: 1px solid var(--line); }
+    aside, .agent { background: var(--panel); }
+    .head { padding: 18px 20px; border-bottom: 1px solid var(--line); }
+    h1, h2, h3 { margin: 0; letter-spacing: 0; }
+    .meta { color: var(--muted); margin-top: 6px; font-size: 14px; }
+    .ok { color: var(--green); font-weight: 700; }
+    .search { margin: 14px 16px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #0b0f15; color: var(--muted); }
+    .nav { padding: 0 12px 24px; }
+    .group { margin: 18px 4px 8px; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+    .item { cursor: pointer; padding: 9px 10px; border-radius: 7px; color: #d7dee9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .item::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--blue); margin-right: 10px; }
+    .item.active { background: #263653; }
+    .item.index::before { background: var(--yellow); }
+    main { padding: 30px 48px; background: #0d1117; overflow: auto; }
+    .chips { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .chip { padding: 5px 12px; border-radius: 999px; background: #222a38; color: #b8c3d4; font-size: 13px; }
+    .title { font-size: 34px; margin-bottom: 8px; }
+    .divider { height: 1px; background: var(--line); margin: 10px 0 28px; }
+    .content { line-height: 1.68; font-size: 16px; color: #dce3ee; }
+    .content h1 { display: none; }
+    .content h2 { margin: 28px 0 10px; font-size: 22px; color: var(--text); }
+    .content h3 { margin: 22px 0 8px; font-size: 18px; color: var(--text); }
+    .content p { margin: 10px 0; }
+    .content ul { margin: 10px 0 18px; padding-left: 22px; }
+    .content li { margin: 6px 0; }
+    .content code { background: #111827; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; color: #bfdbfe; }
+    .frontmatter { border-left: 4px solid var(--blue); background: #111827; padding: 12px 16px; margin-bottom: 20px; color: #b8c3d4; white-space: pre-wrap; }
+    .agent { display: grid; grid-template-rows: auto 1fr auto; }
+    .agent-head { display: flex; justify-content: space-between; align-items: center; }
+    .reset { background: #263653; color: #dce7ff; border: 0; border-radius: 8px; padding: 9px 13px; font-weight: 700; }
+    .chat { padding: 18px; display: flex; flex-direction: column; gap: 18px; }
+    .bubble { background: var(--panel2); border-radius: 12px; padding: 16px; color: #e3e8f0; line-height: 1.6; }
+    .bubble.user { align-self: flex-end; background: #254068; }
+    .call { border: 1px solid #334155; background: #0f172a; border-radius: 10px; padding: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: #c7d2fe; line-height: 1.55; }
+    .label { color: var(--green); font-weight: 800; }
+    .input { padding: 14px 16px; border-top: 1px solid var(--line); display: flex; gap: 10px; }
+    .input input { flex: 1; color: var(--text); background: #0b0f15; border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+    .input button { background: var(--blue); border: 0; border-radius: 8px; color: #07101d; font-weight: 800; padding: 0 18px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="head">
+        <h2>LLM Wiki</h2>
+        <div class="meta"><span id="pageCount">0</span> pages · <span class="ok">local</span> · MCP-ready</div>
+      </div>
+      <input class="search" id="search" placeholder="Search title, path, content..." />
+      <div class="nav" id="nav"></div>
+    </aside>
+    <main>
+      <div class="chips">
+        <span class="chip" id="typeChip">page</span>
+        <span class="chip" id="pathChip">wiki/</span>
+      </div>
+      <h1 class="title" id="title">Loading...</h1>
+      <div class="divider"></div>
+      <div class="content" id="content"></div>
+    </main>
+    <section class="agent">
+      <div class="head agent-head">
+        <h2>Wiki Agent</h2>
+        <button class="reset" id="reset">Reset</button>
+      </div>
+      <div class="chat" id="chat">
+        <div class="call"><span class="label">tools/list</span><br>wiki.list_pages, wiki.get_page, wiki.search, wiki.query, wiki.maintenance_report, wiki.graph</div>
+        <div class="bubble">Ask a question. The panel will simulate routing it through <strong>wiki.query</strong> against loaded wiki pages.</div>
+      </div>
+      <div class="input">
+        <input id="question" placeholder="Ask about your wiki..." />
+        <button id="ask">Send</button>
+      </div>
+    </section>
+  </div>
+  <script>
+    const state = { pages: [], selected: null };
+    const byId = (id) => document.getElementById(id);
+    const groups = ["index", "concepts", "workflows", "sources", "queries", "maintenance"];
+
+    function score(query, page) {
+      const q = query.toLowerCase().split(/\s+/).filter(Boolean);
+      const hay = `${page.title} ${page.path} ${page.content}`.toLowerCase();
+      return q.reduce((sum, token) => sum + (hay.includes(token) ? 1 : 0), 0);
+    }
+
+    function renderNav(filter = "") {
+      const nav = byId("nav");
+      nav.innerHTML = "";
+      for (const group of groups) {
+        const pages = state.pages.filter((page) => page.type === group || (group === "index" && page.path.endsWith("index.md")));
+        const filtered = pages.filter((page) => !filter || score(filter, page));
+        if (!filtered.length) continue;
+        const label = document.createElement("div");
+        label.className = "group";
+        label.textContent = group;
+        nav.appendChild(label);
+        for (const page of filtered) {
+          const item = document.createElement("div");
+          item.className = `item ${page === state.selected ? "active" : ""} ${page.type === "index" ? "index" : ""}`;
+          item.textContent = page.title;
+          item.onclick = () => selectPage(page);
+          nav.appendChild(item);
+        }
+      }
+    }
+
+    function escapeHtml(value) {
+      return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function inlineMarkdown(value) {
+      return escapeHtml(value)
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1");
+    }
+
+    function renderMarkdown(text) {
+      const chunks = [];
+      let body = text;
+      const fm = text.match(/^---\n([\s\S]*?)\n---\n?/);
+      if (fm) {
+        chunks.push(`<div class="frontmatter">${escapeHtml(fm[1])}</div>`);
+        body = text.slice(fm[0].length);
+      }
+      const lines = body.split("\n");
+      let inList = false;
+      for (const line of lines) {
+        if (line.startsWith("# ")) {
+          if (inList) { chunks.push("</ul>"); inList = false; }
+          chunks.push(`<h1>${inlineMarkdown(line.slice(2))}</h1>`);
+        } else if (line.startsWith("## ")) {
+          if (inList) { chunks.push("</ul>"); inList = false; }
+          chunks.push(`<h2>${inlineMarkdown(line.slice(3))}</h2>`);
+        } else if (line.startsWith("### ")) {
+          if (inList) { chunks.push("</ul>"); inList = false; }
+          chunks.push(`<h3>${inlineMarkdown(line.slice(4))}</h3>`);
+        } else if (line.startsWith("- ")) {
+          if (!inList) { chunks.push("<ul>"); inList = true; }
+          chunks.push(`<li>${inlineMarkdown(line.slice(2))}</li>`);
+        } else if (line.trim()) {
+          if (inList) { chunks.push("</ul>"); inList = false; }
+          chunks.push(`<p>${inlineMarkdown(line)}</p>`);
+        }
+      }
+      if (inList) chunks.push("</ul>");
+      return chunks.join("\n");
+    }
+
+    function selectPage(page) {
+      state.selected = page;
+      byId("title").textContent = page.title;
+      byId("content").innerHTML = renderMarkdown(page.content);
+      byId("typeChip").textContent = page.type;
+      byId("pathChip").textContent = page.path;
+      renderNav(byId("search").value);
+    }
+
+    function ask() {
+      const question = byId("question").value.trim();
+      if (!question) return;
+      const ranked = state.pages
+        .map((page) => ({ page, score: score(question, page) }))
+        .filter((row) => row.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
+      const chat = byId("chat");
+      const user = document.createElement("div");
+      user.className = "bubble user";
+      user.textContent = question;
+      chat.appendChild(user);
+      const call = document.createElement("div");
+      call.className = "call";
+      call.innerHTML = `<span class="label">tools/call</span> wiki.query<br>{ question: "${question.replace(/"/g, '\\"')}" }`;
+      chat.appendChild(call);
+      const answer = document.createElement("div");
+      answer.className = "bubble";
+      answer.innerHTML = ranked.length
+        ? `Relevant evidence:<br>${ranked.map((row) => `- ${row.page.path}`).join("<br>")}`
+        : "No local evidence found. Add source material and run ingest.";
+      chat.appendChild(answer);
+      if (ranked[0]) selectPage(ranked[0].page);
+      byId("question").value = "";
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    async function init() {
+      const response = await fetch("wiki-data.json");
+      const data = await response.json();
+      state.pages = data.pages;
+      byId("pageCount").textContent = data.pages.length;
+      selectPage(state.pages.find((page) => page.path.endsWith("index.md")) || state.pages[0]);
+    }
+
+    byId("search").addEventListener("input", (event) => renderNav(event.target.value));
+    byId("ask").addEventListener("click", ask);
+    byId("question").addEventListener("keydown", (event) => { if (event.key === "Enter") ask(); });
+    byId("reset").addEventListener("click", () => {
+      byId("chat").innerHTML = '<div class="call"><span class="label">tools/list</span><br>wiki.list_pages, wiki.get_page, wiki.search, wiki.query, wiki.maintenance_report, wiki.graph</div><div class="bubble">Ask a question. The panel will simulate routing it through <strong>wiki.query</strong> against loaded wiki pages.</div>';
+    });
+    init().catch((error) => {
+      byId("title").textContent = "Viewer data missing";
+      byId("content").textContent = `Run: python3 tools/build_viewer_data.py\n\n${error}`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+{
+  "pages": [
+    {
+      "path": "wiki/concepts/wiki-harness.md",
+      "title": "Wiki Harness",
+      "type": "concepts",
+      "preview": "Wiki Harness Summary A wiki harness is the reusable operating layer around a Markdown-only knowledge base.",
+      "content": "---\ntype: concept\nstatus: stable\ncreated: 2026-06-12\nupdated: 2026-06-12\nsources:\n  - ../../raw/sources/text/sample-agent-workflow.md\nrelated:\n  - ../workflows/source-to-wiki.md\n---\n\n# Wiki Harness\n\n## Summary\n\nA wiki harness is the reusable operating layer around a Markdown-only knowledge base.\n\n## Key Points\n\n- Source snapshots live under `raw/sources/text/`.\n- Compiled wiki pages live under `wiki/`.\n- Rules and skills tell an agent how to use the wiki safely.\n- MCP tools expose the wiki as an agent-accessible interface.\n- Viewer data makes the wiki inspectable in a browser.\n\n## Details\n\nThe harness keeps knowledge out of temporary chat context. An agent can search the wiki, read evidence pages, route questions, and run maintenance checks without needing a database or API key.\n\n## Source Notes\n\nBased on `raw/sources/text/sample-agent-workflow.md`.\n\n## Open Questions\n\n- Which custom page types should a user add for their domain?\n\n## Maintenance Notes\n\n- Rebuild viewer data after changing wiki pages.\n\n"
+    },
+    {
+      "path": "wiki/index.md",
+      "title": "LLM Wiki Index",
+      "type": "index",
+      "preview": "LLM Wiki Index Summary Entry point for the local Markdown-only LLM Wiki.",
+      "content": "---\ntype: index\nstatus: stable\ncreated: 2026-06-12\nupdated: 2026-06-12\nsources:\n  - ../AGENTS.md\nrelated:\n  - concepts/wiki-harness.md\n  - workflows/source-to-wiki.md\n---\n\n# LLM Wiki Index\n\n## Summary\n\nEntry point for the local Markdown-only LLM Wiki.\n\n## Start Here\n\n- [Wiki Harness](concepts/wiki-harness.md)\n- [Source To Wiki Workflow](workflows/source-to-wiki.md)\n- [Example Query](queries/example-query.md)\n\n## Source Pages\n\n- [sample-agent-workflow](sources/sample-agent-workflow.md)\n\n## Maintenance\n\n- [Latest Maintenance Report](maintenance/latest-maintenance-report.md)\n- [Wiki Graph](maintenance/wiki-graph.md)\n- [Operation Log](log.md)\n"
+    },
+    {
+      "path": "wiki/log.md",
+      "title": "Operation Log",
+      "type": "page",
+      "preview": "Operation Log 2026-06-12 - initial package Created the initial runnable wiki harness package.",
+      "content": "---\ntype: log\nstatus: stable\ncreated: 2026-06-12\nupdated: 2026-06-12\nsources:\n  - ../AGENTS.md\nrelated:\n  - index.md\n---\n\n# Operation Log\n\n## 2026-06-12 - initial package\n\n- Created the initial runnable wiki harness package.\n- Added one sample source snapshot.\n- Added starter wiki pages, MCP tools, and viewer.\n\n## 2026-06-12 - ingest_sources.py\n- Refreshed 1 source pages from raw source snapshots.\n"
+    },
+    {
+      "path": "wiki/maintenance/latest-maintenance-report.md",
+      "title": "Latest Maintenance Report",
+      "type": "maintenance",
+      "preview": "Latest Maintenance Report Generated: 2026-06-12 Summary",
+      "content": "---\ntype: maintenance\nstatus: stable\ncreated: 2026-06-12\nupdated: 2026-06-12\nsources:\n  - ../../AGENTS.md\nrelated:\n  - wiki-graph.md\n---\n\n# Latest Maintenance Report\n\nGenerated: 2026-06-12\n\n## Summary\n\n- Run `python3 scripts/maintenance_lint.py` to refresh this report.\n\n"
+    },
+    {
+      "path": "wiki/maintenance/wiki-graph.md",
+      "title": "Wiki Graph",
+      "type": "maintenance",
+      "preview": "Wiki Graph mermaid flowchart LR",
+      "content": "---\ntype: maintenance\nstatus: stable\ncreated: 2026-06-12\nupdated: 2026-06-12\nsources:\n  - ../../AGENTS.md\nrelated:\n  - latest-maintenance-report.md\n---\n\n# Wiki Graph\n\n```mermaid\nflowchart LR\n  concepts_wiki_harness[\"concepts/wiki-harness\"]\n  index[\"index\"]\n  log[\"log\"]\n  maintenance_latest_maintenance_report[\"maintenance/latest-maintenance-report\"]\n  maintenance_wiki_graph[\"maintenance/wiki-graph\"]\n  queries_example_query[\"queries/example-query\"]\n  sources_sample_agent_workflow[\"sources/sample-agent-workflow\"]\n  workflows_source_to_wiki[\"workflows/source-to-wiki\"]\n  index --> concepts_wiki_harness\n  index --> workflows_source_to_wiki\n  index --> queries_example_query\n  index --> sources_sample_agent_workflow\n  index --> maintenance_latest_maintenance_report\n  index --> maintenance_wiki_graph\n  index --> log\n```\n"
+    },
+    {
+      "path": "wiki/queries/example-query.md",
+      "title": "Example Query",
+      "type": "queries",
+      "preview": "Example Query Summary Question: What does the wiki harness provide?",
+      "content": "---\ntype: query\nstatus: stable\ncreated: 2026-06-12\nupdated: 2026-06-12\nsources:\n  - ../concepts/wiki-harness.md\nrelated:\n  - ../workflows/source-to-wiki.md\n---\n\n# Example Query\n\n## Summary\n\nQuestion: What does the wiki harness provide?\n\n## Key Points\n\n- It stores durable source snapshots and compiled wiki pages.\n- It gives agents rules and a reusable skill.\n- It exposes local MCP tools for search, page reading, question routing, maintenance reports, and graph inspection.\n- It provides a browser viewer for human verification.\n\n## Details\n\nUse `wiki.query` or `scripts/query_wiki.py` to route similar questions to evidence pages.\n\n## Source Notes\n\nPrimary page: `wiki/concepts/wiki-harness.md`\n\n## Open Questions\n\n- None.\n\n## Maintenance Notes\n\n- Example query retained as a reusable answer.\n\n"
+    },
+    {
+      "path": "wiki/sources/sample-agent-workflow.md",
+      "title": "sample-agent-workflow",
+      "type": "sources",
+      "preview": "sample-agent-workflow Summary Source page generated from `raw/sources/text/sample-agent-workflow.md`.",
+      "content": "---\ntype: source\nstatus: stable\ncreated: 2026-06-12\nupdated: 2026-06-12\nsources:\n  - ../../raw/sources/text/sample-agent-workflow.md\nrelated:\n  - ../concepts/wiki-harness.md\n---\n\n# sample-agent-workflow\n\n## Summary\n\nSource page generated from `raw/sources/text/sample-agent-workflow.md`.\n\n## Key Points\n\n- Sample Source: Agent Workflow Notes\n- An agent workflow works best when the system separates durable knowledge from temporary chat context.\n- The durable layer should keep source snapshots, compiled wiki pages, and maintenance reports. The agent should search the compiled wiki first because it is shorter and more structu\n- A practical harness includes operating rules, a reusable skill, local scripts, and a tool interface. The tool interface lets an agent list pages, read pages, search evidence, route\n\n## Details\n\nUse this page as the stable wiki-facing reference for the raw source snapshot.\n\n## Source Notes\n\n- Raw source: `raw/sources/text/sample-agent-workflow.md`\n\n## Open Questions\n\n- Which concepts should be promoted from this source?\n\n## Maintenance Notes\n\n- Generated by `scripts/ingest_sources.py`.\n"
+    },
+    {
+      "path": "wiki/workflows/source-to-wiki.md",
+      "title": "Source To Wiki Workflow",
+      "type": "workflows",
+      "preview": "Source To Wiki Workflow Summary This workflow turns one raw source snapshot into a wiki page and visible browser output.",
+      "content": "---\ntype: workflow\nstatus: stable\ncreated: 2026-06-12\nupdated: 2026-06-12\nsources:\n  - ../../raw/sources/text/sample-agent-workflow.md\nrelated:\n  - ../concepts/wiki-harness.md\n---\n\n# Source To Wiki Workflow\n\n## Summary\n\nThis workflow turns one raw source snapshot into a wiki page and visible browser output.\n\n## Key Points\n\n1. Add a `.md` or `.txt` file to `raw/sources/text/`.\n2. Run `python3 scripts/ingest_sources.py`.\n3. Run maintenance and graph scripts.\n4. Run `python3 tools/build_viewer_data.py`.\n5. Open `tools/viewer.html` through a local web server.\n\n## Details\n\nThe ingest script creates source pages under `wiki/sources/`. The maintenance script checks schema, links, missing sources, orphan pages, and duplicate titles. The viewer data script packages the latest Markdown files into JSON for the browser viewer.\n\n## Source Notes\n\nBased on `raw/sources/text/sample-agent-workflow.md`.\n\n## Open Questions\n\n- Should future versions add a write-capable MCP tool with human approval?\n\n## Maintenance Notes\n\n- Keep source snapshots stable and auditable.\n\n"
+    }
+  ],
+  "rawCount": 1
+}
