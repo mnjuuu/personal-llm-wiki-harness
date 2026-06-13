@@ -1,8 +1,8 @@
 ---
 type: maintenance
 status: stable
-created: 2026-06-12
-updated: 2026-06-12
+created: 2026-06-14
+updated: 2026-06-14
 sources:
   - ../../AGENTS.md
 related:

@@ -26,7 +26,7 @@
       "title": "Latest Maintenance Report",
       "type": "maintenance",
       "preview": "Latest Maintenance Report Generated: 2026-06-12 Summary",
-      "content": "---\ntype: maintenance\nstatus: stable\ncreated: 2026-06-12\nupdated: 2026-06-12\nsources:\n  - ../../AGENTS.md\nrelated:\n  - wiki-graph.md\n---\n\n# Latest Maintenance Report\n\nGenerated: 2026-06-12\n\n## Summary\n\n- Run `python3 scripts/maintenance_lint.py` to refresh this report.\n\n"
+      "content": "---\ntype: maintenance\nstatus: stable\ncreated: 2026-06-12\nupdated: 2026-06-12\nsources:\n  - ../../AGENTS.md\nrelated:\n  - wiki-graph.md\n---\n\n# Latest Maintenance Report\n\nGenerated: 2026-06-12\n\n## Summary\n- Wiki pages checked: 8\n- Missing frontmatter: 0\n- Missing required schema fields: 0\n- Broken links: 0\n- Orphan pages: 0\n- Duplicate normalized titles: 0\n\n## Details\n\n### Missing Frontmatter\n- None\n\n### Broken Links\n- None\n\n### Orphan Pages\n- None\n"
     },
     {
       "path": "wiki/maintenance/wiki-graph.md",

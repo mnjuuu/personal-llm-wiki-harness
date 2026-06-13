@@ -1,8 +1,8 @@
 ---
 type: maintenance
 status: stable
-created: 2026-06-12
-updated: 2026-06-12
+created: 2026-06-14
+updated: 2026-06-14
 sources:
   - ../../AGENTS.md
 related:
@@ -11,7 +11,7 @@ related:
 
 # Latest Maintenance Report
 
-Generated: 2026-06-12
+Generated: 2026-06-14
 
 ## Summary
 - Wiki pages checked: 8
